@@ -17,6 +17,26 @@ public class Item {
         this.id = id;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public int getStock() {
+        return stock;
+    }
+
+    public void decreaseStock(){
+        this.stock -= 1;
+    }
+
     @Override
     public String toString() {
         return "["+id+"] "+name+" ("+price+"원) - "+stock+"개";
