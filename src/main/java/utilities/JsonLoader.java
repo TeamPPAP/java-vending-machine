@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class JsonLoader<T> {
-    private static Gson gson = new Gson();
+    private static final Gson gson = new Gson();
 
     public List<T> load(String path) {
         List<T> list = new ArrayList<>();

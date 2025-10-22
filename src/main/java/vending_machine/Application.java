@@ -2,37 +2,6 @@ package vending_machine;
 
 public class Application {
     public static void main(String[] args) {
-        
+
     }
 }
-
-/*
-STATES
-1. 0 balance
-2. positive balance
-
-ACTIONS
-- action: trying to purchase
-    -> price validation
-    -> 갯수가 남아있는지
-    ->
-- action: deposit balance
-    ->
-- action: ask returning balance
-    ->
-
-Utilities
-    -> json 파서
-    -> input module
-
-Exception
-1. 돈이 없을때 잔액 반환 요청
-2. 구매 시도시 잔액이 부족할때
-3. 재고가 없는 음료를 구매시도
-
-4. input module 관련은 전부 illegal arguments exception으로
-
-Display
-1. 메뉴 목록 표시
-
- */

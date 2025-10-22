@@ -9,6 +9,3 @@ public interface VendingMachineState {
     public void userWithdrawnBalance(VendingMachineContext context, int amount);
 
 }
-
-
-

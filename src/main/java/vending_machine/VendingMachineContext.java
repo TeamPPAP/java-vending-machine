@@ -6,7 +6,6 @@ public class VendingMachineContext {
 
     private final StockHandler stockHandler;
     private int balance = 0;
-    private int menuSelected = 0;
     private VendingMachineState currentState;
 
     public VendingMachineContext(StockHandler stockHandler) {
@@ -15,6 +14,9 @@ public class VendingMachineContext {
     }
 
     public void addBalance(int amount) {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("투입 금액은 양수여야 합니다.");
+        }
         this.balance += amount;
     }
 
@@ -23,15 +25,13 @@ public class VendingMachineContext {
     }
 
     public void subtractBalance(int amount) {
+        if (amount < 0) {
+            throw new IllegalArgumentException("금액은 음수일 수 없습니다.");
+        }
+        if (this.balance < amount) {
+            throw new IllegalStateException("잔액이 부족합니다.");
+        }
         this.balance -= amount;
-    }
-
-    public int getMenuSelected() {
-        return menuSelected;
-    }
-
-    public void setMenuSelected(int menuSelected) {
-        this.menuSelected = menuSelected;
     }
 
     public StockHandler getStockHandler() {

@@ -6,6 +6,15 @@ public class Product {
     private final int stock;
 
     public Product(String name, int price, int stock) {
+        if (name == null || name.isBlank()) {
+            throw new IllegalArgumentException("상품명은 필수입니다.");
+        }
+        if (price < 0) {
+            throw new IllegalArgumentException("가격은 음수일 수 없습니다.");
+        }
+        if (stock < 0) {
+            throw new IllegalArgumentException("재고는 음수일 수 없습니다.");
+        }
         this.name = name;
         this.price = price;
         this.stock = stock;
