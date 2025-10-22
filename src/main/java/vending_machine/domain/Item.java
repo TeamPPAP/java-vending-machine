@@ -10,4 +10,12 @@ public class Item {
         this.price = price;
         this.stock = stock;
     }
+
+    public void decreaseStock(int stockCount) {
+        this.stock -= stockCount;
+    }
+
+    public String getName() {
+        return name;
+    }
 }
