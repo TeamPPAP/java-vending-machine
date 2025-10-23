@@ -1,8 +1,11 @@
-package vending_machine.Util;
+package vending_machine.util;
 
 public class Validator {
+    private Validator() {
+    }
+
     //TODO void 및 throw로 변경
-    public boolean stringValidate(String input) {
+    public static boolean stringValidate(String input) {
         if (input.isBlank()) {
             System.err.println("⚠️ 오류 : 빈 값은 입력될 수 없습니다.");
             return true;
@@ -14,26 +17,7 @@ public class Validator {
         return true;
     }
 
-    public boolean cashValidate(String input) {
-        int cash = 0;
-        if (input.isBlank()) {
-            System.err.println("⚠️ 오류 : 빈 값은 입력될 수 없습니다.");
-            return true;
-        }
-        try {
-            cash = Integer.parseInt(input);
-        } catch (NumberFormatException e) {
-            System.err.println("⚠️ 오류 : 숫자만 입력하세요.");
-            return true;
-        }
-        if (cash < 0) {
-            System.err.println("⚠️ 오류 : -돈이라는 없어...");
-            return true;
-        }
-        return false;
-    }
-
-    public boolean selectValidate(int choice, int size) {
+    public static boolean selectValidate(int choice, int size) {
         if (choice >= 1 && choice <= size) {
             return false;
         } else {
@@ -43,7 +27,7 @@ public class Validator {
         }
     }
 
-    public boolean intValidate(String input) {
+    public static boolean intValidate(String input) {
         try {
             Integer.parseInt(input);
         } catch (NumberFormatException e) {

@@ -1,5 +1,7 @@
 package vending_machine.domain;
 
+import static vending_machine.domain.Announce.ErrorAnnounce.SOLD_OUT;
+
 public class Item {
     String name;
     int price;
@@ -15,10 +17,6 @@ public class Item {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public int getStock() {
         return stock;
     }
@@ -31,7 +29,11 @@ public class Item {
         return price;
     }
 
-    public void setPrice(int price) {
-        this.price = price;
+    public boolean decreaseStock() {
+        if(this.stock>0){
+            stock--;
+            return false;
+        }
+        throw new IllegalArgumentException(SOLD_OUT.getMessage());
     }
 }
