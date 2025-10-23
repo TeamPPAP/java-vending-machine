@@ -1,4 +1,9 @@
-package vending_machine;
+package vending_machine.service;
+
+import vending_machine.model.CreditState;
+import vending_machine.model.GameState;
+import vending_machine.model.Item;
+import vending_machine.model.Money;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -6,64 +11,47 @@ import java.util.List;
 import java.util.Scanner;
 
 public class VendingMachine {
-    CreditState creditState;
     Money money;
     Scanner scanner;
+    GameState gameState;
     private List<Item> items = new ArrayList<>();
 
     public VendingMachine(List<Item> items) {
-        creditState = CreditState.NO_CREDIT;
         this.items = items;
     }
     
-    void run (Scanner scanner) {
+    public void run (Scanner scanner) {
         this.scanner = scanner;
+        this.gameState = GameState.IN_PROGRESS;
 
         sayHello();
-        while(true){
+        while(GameState.IN_PROGRESS.equals(gameState)) {
+            money = new Money(scanner);
+
             // 최초 메뉴 노출
             System.out.println(showMenu(items));
-
+            
             // 최초 금액 투입요구
-            this.money = new Money(scanner);
             money.askForAmount();
 
-            // 적절한 금액 투입시 자판기 상태변환 및 금액 추가 메서드 호출
-            if(balance.compareTo(BigDecimal.ZERO) > 0){
-                this.turnCreditOn();
-                this.credit(balance);
-            }
-
-            // 자판기 상태에 따른 현재 금액 노출
-            if(CreditState.HAS_CREDIT.equals(this.creditState))
-                System.out.println("현재 투입된 금액 : " + this.balance + "원" );
+            money.printBalance();
 
             // 금액 투입 후 메뉴 노출
-            System.out.println(this.showMenu(items));
+            System.out.println(showMenu(items));
 
             // 선택된 아이템 객체를 특정하고 반환
             Item targetItem = getChoiceItem(askForItemId());
 
-            this.debit(BigDecimal.valueOf(targetItem.getPrice()));
-            targetItem.decreaseStock();
+            // 아이템 구매
+            purchaseItem(targetItem);
 
-            System.out.println(targetItem.getName() + "가 나왔습니다. (거스름돈:" +this.balance+"원)"  );
+            // 추가 구매 여부
+            askAgainPurchase();
 
-            System.out.print("추가 구매를 하시겠습니까?(Y/N)");
-            String result = scanner.nextLine();
-            scanner.next();
-
-            if(this.balance.compareTo(BigDecimal.ZERO)==0){
-                System.out.println("종료된다.");
+            if (gameState == GameState.ENDED) {
                 break;
             }
-
-            if("N".equals(result)){
-                this.refund();
-                break;
-            }
-
-            System.out.println("현재 투입된 금액 : " + this.balance + "원");
+            money.printBalance(); //while문 밖에서 하면될거같음
         }
     }
 
@@ -80,32 +68,10 @@ public class VendingMachine {
 
         menu = menu + "-----------------------------------\n";
 
-        if(CreditState.HAS_CREDIT.equals(this.creditState))
+        if(CreditState.HAS_CREDIT.equals(money.getCreditState()))
             menu = menu + "[6] 금액 추가 투입\n" + "[7] 금액 반환\n" + "====================================\n";
 
         return menu;
-    }
-
-    void turnCreditOn(){
-        creditState = CreditState.HAS_CREDIT;
-    }
-
-    void turnCreditOff(){
-        creditState = CreditState.NO_CREDIT;
-    }
-
-
-    void credit(BigDecimal amount){
-        this.balance = this.balance.add(amount);
-    }
-
-    void debit(BigDecimal amount){
-        this.balance = this.balance.subtract(amount);
-    }
-
-    void refund(){
-        System.out.println(this.balance + "원이 반환되었습니다.");
-        this.balance = BigDecimal.ZERO;
     }
 
     /**
@@ -132,4 +98,29 @@ public class VendingMachine {
         ).findFirst().get();
     }
 
+    /**
+     * 물건구매 한묶음으로 동작합니다. (잔액 차감 + 재고 차감)
+     */
+    public void purchaseItem(Item targetItem) {
+        money.debit(BigDecimal.valueOf(targetItem.getPrice()));
+        targetItem.decreaseStock();
+
+        System.out.println(targetItem.getName() + "가 나왔습니다. " + money.getChangeBalance());
+    }
+
+    public void askAgainPurchase() {
+        System.out.print("추가 구매를 하시겠습니까?(Y/N)");
+        String result = scanner.nextLine();
+        scanner.next();
+
+        if(CreditState.NO_CREDIT.equals(money.getCreditState())){
+            System.out.println("종료된다.");
+            gameState = GameState.ENDED;
+        }
+
+        if("N".equals(result)){
+            money.refund();
+            gameState = GameState.ENDED;
+        }
+    }
 }

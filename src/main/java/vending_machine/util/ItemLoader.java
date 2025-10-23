@@ -1,7 +1,8 @@
-package vending_machine;
+package vending_machine.util;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import vending_machine.model.Item;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;

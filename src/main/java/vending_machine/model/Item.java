@@ -1,4 +1,4 @@
-package vending_machine;
+package vending_machine.model;
 
 public class Item {
     private int id;
