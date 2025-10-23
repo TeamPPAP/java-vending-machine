@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.List;
 
 public class JsonLoader<T> {
@@ -19,26 +18,26 @@ public class JsonLoader<T> {
     }
 
     public List<T> load(String path) {
-        List<T> list = new ArrayList<>();
-        try (InputStream inputStream = getInputStream(path)) {
-            if (inputStream == null) {
-                throw new IllegalArgumentException("File not found");
-            }
-            list = getObject(inputStream);
-        } catch (IOException e) {
-            System.out.println("Error while loading " + path + ": " + e.getMessage());
+        InputStream inputStream = loadResourceStream(path);
+        return parseJsonToList(inputStream, path);
+    }
+
+    private InputStream loadResourceStream(String path) {
+        InputStream stream = getClass().getClassLoader().getResourceAsStream(path);
+        
+        if (stream == null) {
+            throw new IllegalArgumentException("파일을 찾을 수 없습니다: " + path);
         }
-        return list;
+        
+        return stream;
     }
 
-    private InputStream getInputStream(String path) {
-        return getClass().getClassLoader().getResourceAsStream(path);
-    }
-
-    private List<T> getObject(InputStream inputStream) throws IOException {
+    private List<T> parseJsonToList(InputStream inputStream, String path) {
         try (InputStreamReader reader = new InputStreamReader(inputStream)) {
             Type listType = TypeToken.getParameterized(List.class, type).getType();
             return gson.fromJson(reader, listType);
+        } catch (IOException e) {
+            throw new IllegalStateException("파일 파싱 중 오류가 발생했습니다: " + path, e);
         }
     }
 }

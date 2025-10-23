@@ -79,7 +79,7 @@ public class VendingMachineController {
         }
     }
 
-    public void executePurchase(int productNumber) {
+    private void executePurchase(int productNumber) {
         PurchaseResponse response = vendingMachineService.purchase(productNumber);
         outputView.printPurchaseSuccess(response.name(), response.balance());
     }
