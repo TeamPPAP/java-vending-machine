@@ -1,6 +1,6 @@
 package machine.vending.domain;
 
-import machine.vending.domain.state.NotEnoughBalanceState;
+import machine.vending.domain.state.NoBalanceState;
 import machine.vending.domain.state.VendingMachineState;
 
 public class VendingMachineContext {
@@ -11,7 +11,7 @@ public class VendingMachineContext {
 
     public VendingMachineContext(Inventory inventory) {
         this.inventory = inventory;
-        this.currentState = NotEnoughBalanceState.getInstance();
+        this.currentState = NoBalanceState.getInstance();
     }
 
     public void addBalance(int amount) {

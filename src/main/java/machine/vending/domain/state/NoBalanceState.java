@@ -3,17 +3,17 @@ package machine.vending.domain.state;
 import machine.vending.domain.VendingMachineContext;
 import machine.vending.exception.NoBalanceException;
 
-public class NotEnoughBalanceState implements VendingMachineState {
+public class NoBalanceState implements VendingMachineState {
 
     // Note: Thread-unsafe lazy initialization (자판기는 단일 스레드 환경에서만 동작)
-    private static NotEnoughBalanceState instance;
+    private static NoBalanceState instance;
 
-    private NotEnoughBalanceState() {
+    private NoBalanceState() {
     }
 
-    public static NotEnoughBalanceState getInstance() {
+    public static NoBalanceState getInstance() {
         if (instance == null) {
-            instance = new NotEnoughBalanceState();
+            instance = new NoBalanceState();
         }
         return instance;
     }
@@ -27,7 +27,7 @@ public class NotEnoughBalanceState implements VendingMachineState {
     public void userDepositedBalance(VendingMachineContext context, int amount) {
         context.addBalance(amount);
         if (context.getBalance() > 0) {
-            context.setState(EnoughBalanceState.getInstance());
+            context.setState(HasBalanceState.getInstance());
         }
     }
 
