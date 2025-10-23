@@ -1,23 +1,24 @@
-package domain;
+package machine.vending.domain;
 
-import infrastructure.JsonLoader;
+import machine.vending.infrastructure.JsonLoader;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class StockHandler {
-    private final String filePath = "items.json";
+public class Inventory {
     private final List<Product> products;
+    private final int size;
 
-    public StockHandler() {
+    public Inventory() {
         JsonLoader<Product> loader = new JsonLoader<>(Product.class);
-        this.products = new ArrayList<>(loader.load(filePath));
+        this.products = new ArrayList<>(loader.load("items.json"));
+        this.size = this.products.size();
     }
 
     public int size() {
-        return products.size();
+        return this.size;
     }
 
     public Product getByDisplayNumber(int displayNumber) {
@@ -41,8 +42,8 @@ public class StockHandler {
     @Override
     public String toString() {
         return IntStream.range(0, products.size())
-                .mapToObj(i -> "[" + (i + 1) + "] " + products.get(i))
-                .collect(Collectors.joining("\n"));
+            .mapToObj(i -> "[" + (i + 1) + "] " + products.get(i))
+            .collect(Collectors.joining("\n"));
     }
 
 }

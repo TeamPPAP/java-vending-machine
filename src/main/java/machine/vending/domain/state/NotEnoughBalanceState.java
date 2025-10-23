@@ -1,13 +1,15 @@
-package vending_machine;
+package machine.vending.domain.state;
 
-import exception.NoBalanceException;
+import machine.vending.domain.VendingMachineContext;
+import machine.vending.exception.NoBalanceException;
 
 public class NotEnoughBalanceState implements VendingMachineState {
 
     // Note: Thread-unsafe lazy initialization (자판기는 단일 스레드 환경에서만 동작)
     private static NotEnoughBalanceState instance;
 
-    private NotEnoughBalanceState() {}
+    private NotEnoughBalanceState() {
+    }
 
     public static NotEnoughBalanceState getInstance() {
         if (instance == null) {

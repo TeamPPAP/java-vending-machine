@@ -1,15 +1,16 @@
-package vending_machine;
+package machine.vending.domain;
 
-import domain.StockHandler;
+import machine.vending.domain.state.NotEnoughBalanceState;
+import machine.vending.domain.state.VendingMachineState;
 
 public class VendingMachineContext {
 
-    private final StockHandler stockHandler;
+    private final Inventory inventory;
     private int balance = 0;
     private VendingMachineState currentState;
 
-    public VendingMachineContext(StockHandler stockHandler) {
-        this.stockHandler = stockHandler;
+    public VendingMachineContext(Inventory inventory) {
+        this.inventory = inventory;
         this.currentState = NotEnoughBalanceState.getInstance();
     }
 
@@ -34,8 +35,8 @@ public class VendingMachineContext {
         this.balance -= amount;
     }
 
-    public StockHandler getStockHandler() {
-        return stockHandler;
+    public Inventory getInventory() {
+        return inventory;
     }
 
     public VendingMachineState getState() {

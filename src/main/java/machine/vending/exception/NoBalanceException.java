@@ -1,4 +1,4 @@
-package exception;
+package machine.vending.exception;
 
 public class NoBalanceException extends VendingMachineException {
     public NoBalanceException() {

@@ -1,6 +1,4 @@
-package view;
-
-import domain.StockHandler;
+package machine.vending.view;
 
 public class OutputView {
 
@@ -8,15 +6,15 @@ public class OutputView {
         System.out.println("🥤 안녕하세요! PPAP 자판기입니다. 🥤");
     }
 
-    public void printMenu(StockHandler stockHandler, int balance) {
+    public void printMenu(String inventory, int balance) {
         System.out.println();
         if (balance > 0) {
             System.out.println("현재 투입된 금액: " + balance + "원");
         }
         System.out.println("===============================");
-        System.out.println(stockHandler.toString());
+        System.out.println(inventory);
         System.out.println("-------------------------------");
-        
+
         if (balance > 0) {
             System.out.println("[6] 금액 추가 투입");
             System.out.println("[7] 금액 반환");

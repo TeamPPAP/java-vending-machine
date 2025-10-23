@@ -1,4 +1,4 @@
-package domain;
+package machine.vending.domain;
 
 public class Product {
     private final String name;

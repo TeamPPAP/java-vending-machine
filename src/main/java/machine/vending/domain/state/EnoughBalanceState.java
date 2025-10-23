@@ -1,15 +1,17 @@
-package vending_machine;
+package machine.vending.domain.state;
 
-import domain.Product;
-import exception.InsufficientBalanceException;
-import exception.OutOfStockException;
+import machine.vending.domain.Product;
+import machine.vending.domain.VendingMachineContext;
+import machine.vending.exception.InsufficientBalanceException;
+import machine.vending.exception.OutOfStockException;
 
 public class EnoughBalanceState implements VendingMachineState {
 
     // Note: Thread-unsafe lazy initialization (자판기는 단일 스레드 환경에서만 동작)
     private static EnoughBalanceState instance;
 
-    private EnoughBalanceState() {}
+    private EnoughBalanceState() {
+    }
 
     public static EnoughBalanceState getInstance() {
         if (instance == null) {
@@ -20,7 +22,7 @@ public class EnoughBalanceState implements VendingMachineState {
 
     @Override
     public void userTriedPurchasing(VendingMachineContext context, int product) {
-        Product selectedItem = context.getStockHandler().getByDisplayNumber(product);
+        Product selectedItem = context.getInventory().getByDisplayNumber(product);
 
         if (!selectedItem.hasStock()) {
             throw new OutOfStockException(selectedItem.getName());
@@ -31,8 +33,8 @@ public class EnoughBalanceState implements VendingMachineState {
         }
 
         context.subtractBalance(selectedItem.getPrice());
-        context.getStockHandler().purchase(product);
-        
+        context.getInventory().purchase(product);
+
         if (context.getBalance() == 0) {
             context.setState(NotEnoughBalanceState.getInstance());
         }

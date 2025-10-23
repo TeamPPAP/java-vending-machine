@@ -1,4 +1,4 @@
-package view;
+package machine.vending.view;
 
 import java.util.Scanner;
 
@@ -30,7 +30,7 @@ public class InputView {
     public boolean readContinuePurchase() {
         System.out.print("추가 구매를 하시겠습니까? (Y/N) ");
         String input = scanner.nextLine().trim().toUpperCase();
-        
+
         if (input.equals("Y")) {
             return true;
         }
