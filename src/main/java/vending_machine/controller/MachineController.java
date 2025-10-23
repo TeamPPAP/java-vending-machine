@@ -59,7 +59,7 @@ public class MachineController {
                 logicView.printInsertCash();
                 String input = inputView.readInput();
                 ms.insertCash(input);
-                logicView.printCurrentCash(ms.getCash());
+
                 inputSuccess = true;
             } catch (IllegalArgumentException e) {
                 exceptionView.printError(e.getMessage());
@@ -90,7 +90,7 @@ public class MachineController {
 
         if (choice == (menuSize - 1)) {
             insertCash();
-
+            logicView.printCurrentCash(ms.getCash());
             return true;
         }
 
