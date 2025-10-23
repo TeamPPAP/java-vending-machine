@@ -49,7 +49,7 @@ public class VendingMachineController {
         int choice = inputView.readMenuChoice();
         int size = vendingMachineService.getInventorySize();
 
-        MenuAction menuAction = MenuAction.of(choice - size);
+        MenuAction menuAction = MenuAction.from(choice, size);
 
         switch (menuAction) {
             case ADD_MONEY -> handleAddMoney();

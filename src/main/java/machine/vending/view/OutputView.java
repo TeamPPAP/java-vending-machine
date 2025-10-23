@@ -1,11 +1,9 @@
 package machine.vending.view;
 
+import machine.vending.controller.value.MenuAction;
 import machine.vending.domain.Inventory;
 
 public class OutputView {
-
-    private static final int ADD_MONEY_OFFSET = 1;
-    private static final int RETURN_MONEY_OFFSET = 2;
 
     public void printWelcome() {
         System.out.println("🥤 안녕하세요! PPAP 자판기입니다. 🥤");
@@ -21,8 +19,9 @@ public class OutputView {
         System.out.println("-------------------------------");
 
         if (balance > 0) {
-            System.out.println("[" + (inventory.size() + ADD_MONEY_OFFSET) + "] 금액 추가 투입");
-            System.out.println("[" + (inventory.size() + RETURN_MONEY_OFFSET) + "] 금액 반환");
+            int size = inventory.size();
+            System.out.println("[" + MenuAction.ADD_MONEY.calculateMenuNumber(size) + "] 금액 추가 투입");
+            System.out.println("[" + MenuAction.RETURN_MONEY.calculateMenuNumber(size) + "] 금액 반환");
             System.out.println("===============================");
         }
     }

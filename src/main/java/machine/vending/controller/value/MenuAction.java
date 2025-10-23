@@ -1,21 +1,31 @@
 package machine.vending.controller.value;
 
-public enum MenuAction {
-    PURCHASE,
-    ADD_MONEY,
-    RETURN_MONEY;
+import java.util.Arrays;
 
-    public static MenuAction of(int choice) {
-        return switch (getChoice(choice)) {
-            case 0 -> PURCHASE;
-            case 1 -> ADD_MONEY;
-            case 2 -> RETURN_MONEY;
-            default -> throw new IllegalArgumentException("Invalid choice: " + choice);
-        };
+public enum MenuAction {
+    PURCHASE(0),
+    ADD_MONEY(1),
+    RETURN_MONEY(2);
+
+    private final int offset;
+
+    MenuAction(int offset) {
+        this.offset = offset;
     }
 
-    private static int getChoice(int choice) {
-        if (choice < 0) choice = 0;
-        return choice;
+    public static MenuAction from(int choice, int inventorySize) {
+        if (choice >= 1 && choice <= inventorySize) {
+            return PURCHASE;
+        }
+
+        return Arrays.stream(values())
+            .filter(action -> action != PURCHASE)
+            .filter(action -> choice == inventorySize + action.offset)
+            .findFirst()
+            .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 메뉴 번호입니다: " + choice));
+    }
+
+    public int calculateMenuNumber(int inventorySize) {
+        return inventorySize + offset;
     }
 }
