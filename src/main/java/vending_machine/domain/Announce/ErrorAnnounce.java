@@ -8,7 +8,9 @@ public enum ErrorAnnounce {
     KOREA_MONEY("⚠️ 오류 : 1원 단위는 받지 않습니다. 다시 입력하세요.\n"),
     ONLY_INPUT_NUMBER("⚠️ 오류 : 숫자만 입력해주세요.\n"),
     MINUS_CASH("⚠️ 오류 : - 돈이라는 건 없습니다.\n"),
-    INPUT_EMPTY("⚠️ 오류 : 빈 값은 입력될 수 없습니다.\n");
+    INPUT_EMPTY("⚠️ 오류 : 빈 값은 입력될 수 없습니다.\n"),
+    YES_NO("⚠️ 오류 : Y 또는 N으로 입력해주세요.\n"),
+    INDEX_BOUND_ERROR("⚠️ 오류: 1부터 %d 사이의 번호를 입력해주세요.\n");
 
     private final String message;
 

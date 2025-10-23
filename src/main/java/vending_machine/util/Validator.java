@@ -1,38 +1,44 @@
 package vending_machine.util;
 
+import static vending_machine.domain.Announce.ErrorAnnounce.INDEX_BOUND_ERROR;
+import static vending_machine.domain.Announce.ErrorAnnounce.INPUT_EMPTY;
+import static vending_machine.domain.Announce.ErrorAnnounce.ONLY_INPUT_NUMBER;
+import static vending_machine.domain.Announce.ErrorAnnounce.YES_NO;
+import static vending_machine.domain.Announce.MachineAnnounce.DIVIDER_THICK;
+
 public class Validator {
     private Validator() {
     }
 
-    //TODO void 및 throw로 변경
-    public static boolean stringValidate(String input) {
+    public static void validateRetry(String input) throws IllegalArgumentException {
         if (input.isBlank()) {
-            System.err.println("⚠️ 오류 : 빈 값은 입력될 수 없습니다.");
-            return true;
+            throw new IllegalArgumentException(INPUT_EMPTY.getMessage());
         }
         if (input.equalsIgnoreCase("y") || input.equalsIgnoreCase("n")) {
-            return false;
+            return;
         }
-        System.err.println("⚠️ 오류 : Y 또는 N으로 입력해주세요.");
-        return true;
+        throw new IllegalArgumentException(YES_NO.getMessage());
     }
 
-    public static boolean selectValidate(int choice, int size) {
+    public static void validateMenuChoice(int choice, int size) throws IllegalArgumentException {
         if (choice >= 1 && choice <= size) {
-            return false;
-        } else {
-            System.err.printf("⚠️ 오류: 1부터 %d 사이의 번호를 입력해주세요.\n", size);
-            System.err.println("==================================================================");
-            return true;
+            return;
         }
+        String errorMessage = String.format(INDEX_BOUND_ERROR.getMessage(), size);
+        throw new IllegalArgumentException(errorMessage);
     }
 
-    public static boolean intValidate(String input) {
+    public static int validateInt(String input) throws IllegalArgumentException {
         try {
-            Integer.parseInt(input);
+            validateString(input);
+            return Integer.parseInt(input);
         } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("⚠️ 오류: 숫자만 입력하세요.");
+            throw new IllegalArgumentException(ONLY_INPUT_NUMBER.getMessage());
         }
-        return false;
+    }
+    public static void validateString(String input) throws IllegalArgumentException {
+        if (input.isBlank()) {
+            throw new IllegalArgumentException(INPUT_EMPTY.getMessage());
+        }
     }
 }

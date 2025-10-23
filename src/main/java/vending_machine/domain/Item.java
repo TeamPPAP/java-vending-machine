@@ -2,6 +2,8 @@ package vending_machine.domain;
 
 import static vending_machine.domain.Announce.ErrorAnnounce.SOLD_OUT;
 
+import java.security.InvalidKeyException;
+
 public class Item {
     String name;
     int price;
@@ -29,11 +31,10 @@ public class Item {
         return price;
     }
 
-    public boolean decreaseStock() {
-        if(this.stock>0){
-            stock--;
-            return false;
+    public void decreaseStock() throws InvalidKeyException {
+        if(this.stock<=0){
+            throw new InvalidKeyException(SOLD_OUT.getMessage());
         }
-        throw new IllegalArgumentException(SOLD_OUT.getMessage());
+        stock--;
     }
 }

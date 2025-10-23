@@ -8,7 +8,7 @@ import static vending_machine.domain.Announce.ErrorAnnounce.NOT_ENOUGH_CASH;
 import static vending_machine.domain.Announce.ErrorAnnounce.ONLY_INPUT_NUMBER;
 
 public class Cash {
-    private int cash = 0;
+    private int cash;
 
     private Cash() {
     }
@@ -21,24 +21,18 @@ public class Cash {
         return new Cash(cash);
     }
 
-    public Cash insertCash(String money) {
-        int tmp = cashValidate(money);
-        cash += tmp;
-        return this;
+    public void insertCash(String money) throws IllegalArgumentException {
+        int num = cashValidate(money);
+        cash+=num;
     }
 
-    public Cash perchaseCash(int price, Item item) throws IllegalArgumentException {
+    public void purchaseCash(Item item) throws IllegalArgumentException {
         purchaseConditions(item);
-        this.cash -= price;
-        return new Cash(cash);
+        this.cash -= item.getPrice();
     }
 
     public int getCash() {
         return cash;
-    }
-
-    public void setCash(int cash) {
-        this.cash = cash;
     }
 
     public boolean isZero() {
@@ -47,17 +41,19 @@ public class Cash {
 
     private void purchaseConditions(Item item) {
         if (cash < item.getPrice()) {
-            throw new IllegalArgumentException(NOT_ENOUGH_CASH.getMessage());
+            int num = item.getPrice() - cash;
+            String message = String.format(NOT_ENOUGH_CASH.getMessage(), num);
+            throw new IllegalArgumentException(message);
         }
     }
 
-    public int cashValidate(String input) {
+    public int cashValidate(String input) throws IllegalArgumentException {
         validInput(input);
-        int cash = validInt(input);
-        validKoreaMoney();
-        validCash();
-        notMinusMoney();
-        return cash;
+        int money = validInt(input);
+        validKoreaMoney(money);
+        validCash(money);
+        notMinusMoney(money);
+        return money;
     }
 
     private void validCash() {
@@ -65,7 +61,11 @@ public class Cash {
             throw new IllegalArgumentException(GO_AWAY_POOR.getMessage());
         }
     }
-
+    private void validCash(int money) {
+        if (money <= 0) {
+            throw new IllegalArgumentException(GO_AWAY_POOR.getMessage());
+        }
+    }
     private void validInput(String input) {
         if (input.isBlank()) {
             throw new IllegalArgumentException(INPUT_EMPTY.getMessage());
@@ -73,25 +73,24 @@ public class Cash {
     }
 
     private int validInt(String input) {
+        int money;
         try {
-            cash = Integer.parseInt(input);
+            money = Integer.parseInt(input);
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException(ONLY_INPUT_NUMBER.getMessage());
         }
-        return cash;
+        return money;
     }
 
-    private void validKoreaMoney() {
-        if (cash % 10 != 0) {
+    private void validKoreaMoney(int money) {
+        if (money % 10 != 0) {
             throw new IllegalArgumentException(KOREA_MONEY.getMessage());
         }
     }
 
-    private void notMinusMoney() {
-        if (cash < 0) {
+    private void notMinusMoney(int money) {
+        if (money < 0) {
             throw new IllegalArgumentException(MINUS_CASH.getMessage());
         }
     }
-
-
 }
