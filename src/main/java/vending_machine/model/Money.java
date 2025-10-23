@@ -10,6 +10,7 @@ public class Money {
     Scanner scanner;
 
     public Money(Scanner scanner) {
+        balance = BigDecimal.ZERO;
         creditState = CreditState.NO_CREDIT;
         this.scanner = scanner;
     }
@@ -21,7 +22,7 @@ public class Money {
     }
 
     public void credit(BigDecimal amount) {
-        if (balance.compareTo(BigDecimal.ZERO) > 0) {
+        if (amount.compareTo(BigDecimal.ZERO) > 0) {
             this.turnCreditOn();
             this.balance = this.balance.add(amount);
         }

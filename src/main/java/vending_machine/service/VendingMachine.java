@@ -22,12 +22,11 @@ public class VendingMachine {
     
     public void run (Scanner scanner) {
         this.scanner = scanner;
+        money = new Money(scanner);
         this.gameState = GameState.IN_PROGRESS;
 
-        sayHello();
+        System.out.println(sayHello());
         while(GameState.IN_PROGRESS.equals(gameState)) {
-            money = new Money(scanner);
-
             // 최초 메뉴 노출
             System.out.println(showMenu(items));
             
@@ -48,9 +47,10 @@ public class VendingMachine {
             // 추가 구매 여부
             askAgainPurchase();
 
-            if (gameState == GameState.ENDED) {
+            if (GameState.ENDED.equals(gameState)) {
                 break;
             }
+
             money.printBalance(); //while문 밖에서 하면될거같음
         }
     }
