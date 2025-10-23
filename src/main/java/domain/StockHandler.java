@@ -1,6 +1,6 @@
 package domain;
 
-import utilities.JsonLoader;
+import infrastructure.JsonLoader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +12,7 @@ public class StockHandler {
     private final List<Product> products;
 
     public StockHandler() {
-        JsonLoader<Product> loader = new JsonLoader<>();
+        JsonLoader<Product> loader = new JsonLoader<>(Product.class);
         this.products = new ArrayList<>(loader.load(filePath));
     }
 

@@ -1,4 +1,4 @@
-package utilities;
+package infrastructure;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -12,6 +12,11 @@ import java.util.List;
 
 public class JsonLoader<T> {
     private static final Gson gson = new Gson();
+    private final Class<T> type;
+
+    public JsonLoader(Class<T> type) {
+        this.type = type;
+    }
 
     public List<T> load(String path) {
         List<T> list = new ArrayList<>();
@@ -32,9 +37,8 @@ public class JsonLoader<T> {
 
     private List<T> getObject(InputStream inputStream) throws IOException {
         try (InputStreamReader reader = new InputStreamReader(inputStream)) {
-            Type itemListType = new TypeToken<List<T>>() {
-            }.getType();
-            return gson.fromJson(reader, itemListType);
+            Type listType = TypeToken.getParameterized(List.class, type).getType();
+            return gson.fromJson(reader, listType);
         }
     }
 }

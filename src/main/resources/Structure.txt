@@ -24,3 +24,31 @@ Exception
 
 Display
 1. 메뉴 목록 표시
+
+
+src/main/java/
+├── controller/
+│   └── VendingMachineController.java
+│
+├── service/
+│   └── VendingMachineService.java
+│
+├── domain/
+│   ├── Product.java
+│   ├── ProductRepository.java
+│   ├── VendingMachineState.java
+│   ├── EnoughBalanceState.java
+│   ├── NotEnoughBalanceState.java
+│   └── VendingMachineContext.java
+│
+├── view/
+│   ├── InputView.java
+│   └── OutputView.java
+│
+├── exception/
+│   └── ...
+│
+├── infrastructure/
+│   └── JsonLoader.java
+│
+└── Application.java
