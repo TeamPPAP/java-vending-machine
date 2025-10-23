@@ -37,7 +37,7 @@ public class VendingMachineController {
 
     private void showMenuAndGetMoney() {
         ContextInfo info = vendingMachineService.findContext();
-        outputView.printMenu(info.inventory().toString(), info.balance());
+        outputView.printMenu(info.inventory(), info.balance());
 
         if (vendingMachineService.isBalanceZero()) {
             int money = inputView.readMoney();

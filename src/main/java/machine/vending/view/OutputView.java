@@ -1,12 +1,17 @@
 package machine.vending.view;
 
+import machine.vending.domain.Inventory;
+
 public class OutputView {
+
+    private static final int ADD_MONEY_OFFSET = 1;
+    private static final int RETURN_MONEY_OFFSET = 2;
 
     public void printWelcome() {
         System.out.println("🥤 안녕하세요! PPAP 자판기입니다. 🥤");
     }
 
-    public void printMenu(String inventory, int balance) {
+    public void printMenu(Inventory inventory, int balance) {
         System.out.println();
         if (balance > 0) {
             System.out.println("현재 투입된 금액: " + balance + "원");
@@ -16,8 +21,8 @@ public class OutputView {
         System.out.println("-------------------------------");
 
         if (balance > 0) {
-            System.out.println("[6] 금액 추가 투입");
-            System.out.println("[7] 금액 반환");
+            System.out.println("[" + (inventory.size() + ADD_MONEY_OFFSET) + "] 금액 추가 투입");
+            System.out.println("[" + (inventory.size() + RETURN_MONEY_OFFSET) + "] 금액 반환");
             System.out.println("===============================");
         }
     }
