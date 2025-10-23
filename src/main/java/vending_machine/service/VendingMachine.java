@@ -102,6 +102,16 @@ public class VendingMachine {
      * 물건구매 한묶음으로 동작합니다. (잔액 차감 + 재고 차감)
      */
     public void purchaseItem(Item targetItem) {
+        BigDecimal balance = money.getBalance();
+        BigDecimal price   = BigDecimal.valueOf(targetItem.getPrice()); // getPrice가 long/double이면 OK
+        // getPrice가 int라면: BigDecimal.valueOf((long) targetItem.getPrice());
+
+        if (balance.compareTo(price) < 0) {
+            throw new IllegalArgumentException(
+                    "잔액 부족: balance=" + balance + ", price=" + price
+            );
+        }
+
         money.debit(BigDecimal.valueOf(targetItem.getPrice()));
         targetItem.decreaseStock();
 

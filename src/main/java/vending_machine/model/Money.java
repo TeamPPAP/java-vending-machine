@@ -15,6 +15,10 @@ public class Money {
         this.scanner = scanner;
     }
 
+    public BigDecimal getBalance() {
+        return balance;
+    }
+
     //TODO : 금액 투입 + 필드 반영을 위한 적절한 명칭 변경 예정
     public void askForAmount() {
         System.out.print("투입할 금액을 입력해주세요 : ");
