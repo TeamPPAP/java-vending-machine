@@ -33,12 +33,12 @@ public class Item {
         return stock;
     }
 
-    public void decreaseStock(){
+    public void decreaseStock() {
         this.stock -= 1;
     }
 
     @Override
     public String toString() {
-        return "["+id+"] "+name+" ("+price+"원) - "+stock+"개";
+        return "[" + id + "] " + name + " (" + price + "원) - " + stock + "개";
     }
 }

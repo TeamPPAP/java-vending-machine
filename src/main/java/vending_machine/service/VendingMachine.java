@@ -4,6 +4,7 @@ import vending_machine.model.CreditState;
 import vending_machine.model.GameState;
 import vending_machine.model.Item;
 import vending_machine.model.Money;
+import vending_machine.util.input.InputReaderFactory;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -13,21 +14,22 @@ import java.util.Scanner;
 
 public class VendingMachine {
     Money money;
-    Scanner scanner;
     GameState gameState;
     private List<Item> items = new ArrayList<>();
+
+    InputReaderFactory reader;
 
     public VendingMachine(List<Item> items) {
         this.items = items;
     }
     
     public void run (Scanner scanner) {
-        this.scanner = scanner;
-        money = new Money(scanner);
+        this.reader = new InputReaderFactory(scanner);
+        this.money = new Money(scanner);
         this.gameState = GameState.IN_PROGRESS;
 
-        System.out.println(sayHello());
-        while(GameState.IN_PROGRESS.equals(gameState)) {
+        sayHello();
+        while(GameState.IN_PROGRESS == gameState) {
             // 최초 메뉴 노출
             System.out.println(showMenu(items));
             
@@ -44,7 +46,7 @@ public class VendingMachine {
             Item targetItem = null;
             routeByMenu(id, targetItem);
 
-            if (GameState.ENDED.equals(gameState)) {
+            if (GameState.ENDED == gameState) {
                 break;
             }
 
@@ -52,8 +54,8 @@ public class VendingMachine {
         }
     }
 
-    String sayHello(){
-        return "\uD83E\uDD64 안녕하세요! PPAP 자판기입니다. \uD83E\uDD64";
+    void sayHello(){
+        System.out.println("\uD83E\uDD64 안녕하세요! PPAP 자판기입니다. \uD83E\uDD64");
     }
 
     String showMenu(List<Item> items){
@@ -65,7 +67,7 @@ public class VendingMachine {
 
         menu = menu + "-----------------------------------\n";
 
-        if(CreditState.HAS_CREDIT.equals(money.getCreditState()))
+        if(CreditState.HAS_CREDIT  ==  money.getCreditState())
             menu = menu + "[6] 금액 추가 투입\n" + "[7] 금액 반환\n" + "====================================\n";
 
         return menu;
@@ -77,7 +79,7 @@ public class VendingMachine {
      */
     private int askForMenuId() {
         System.out.print("선택할 메뉴 번호를 입력하세요 : ");
-        return scanner.nextInt();
+        return reader.integerInRange(1, 7).read();
     }
 
     /**
@@ -117,10 +119,9 @@ public class VendingMachine {
 
     public void askAgainPurchase() {
         System.out.print("추가 구매를 하시겠습니까?(Y/N)");
-        String result = scanner.nextLine();
-        scanner.next();
+        String result = reader.stringIn(List.of("Y", "N")).read();
 
-        if(CreditState.NO_CREDIT.equals(money.getCreditState())){
+        if(CreditState.NO_CREDIT == money.getCreditState()){
             System.out.println("종료된다.");
             gameState = GameState.ENDED;
         }
