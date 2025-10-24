@@ -14,6 +14,7 @@ import static vending_machine.domain.Announce.MenuAnnounce.RETRY;
 import static vending_machine.domain.Announce.MenuAnnounce.SELECT_MENU;
 
 import java.util.List;
+import vending_machine.domain.Announce.State;
 import vending_machine.domain.Cash;
 import vending_machine.domain.Item;
 
@@ -23,7 +24,7 @@ public class LogicView {
         System.out.printf(START.getMessage());
     }
 
-    public void printVendingMachine(List<Item> items, Cash cash) {
+    public void printVendingMachine(List<Item> items, Cash cash, State state) {
         int size = items.size();
         System.out.printf(DIVIDER_THICK.getMessage());
 
@@ -34,7 +35,7 @@ public class LogicView {
 
         System.out.printf(DIVIDER_THIN.getMessage());
 
-        if (!cash.isZero()) {
+        if (state != State.FIRST_ON) {
             System.out.printf(PRINT_INSERT_MENU.getMessage(), size + 1);
             System.out.printf(PRINT_REFUND_MENU.getMessage(), size + 2);
         }

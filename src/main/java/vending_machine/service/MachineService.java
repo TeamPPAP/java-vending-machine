@@ -24,10 +24,6 @@ public class MachineService {
         return cash;
     }
 
-    public boolean isCashZero() {
-        return cash.isZero();
-    }
-
     public int getMenuSize() {
         return items.size() + 2;
     }
@@ -38,8 +34,8 @@ public class MachineService {
 
     public Item purchaseItem(int choiceIndex) throws IllegalArgumentException, InvalidKeyException {
         Item selectedItem = items.get(choiceIndex - 1);
-        cash.purchaseCash(selectedItem);
         selectedItem.decreaseStock();
+        cash.purchaseCash(selectedItem);
         return selectedItem;
     }
 }

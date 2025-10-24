@@ -56,11 +56,6 @@ public class Cash {
         return money;
     }
 
-    private void validCash() {
-        if (isZero()) {
-            throw new IllegalArgumentException(GO_AWAY_POOR.getMessage());
-        }
-    }
     private void validCash(int money) {
         if (money <= 0) {
             throw new IllegalArgumentException(GO_AWAY_POOR.getMessage());

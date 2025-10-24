@@ -1,6 +1,7 @@
 package vending_machine.controller;
 
 import java.security.InvalidKeyException;
+import vending_machine.domain.Announce.State;
 import vending_machine.domain.Item;
 import vending_machine.service.MachineService;
 import vending_machine.util.Validator;
@@ -13,6 +14,7 @@ public class MachineController {
     private final InputView inputView;
     private final LogicView logicView;
     private final ExceptionView exceptionView;
+    private State machineState = State.FIRST_ON;
 
     public MachineController() {
         this.ms = new MachineService();
@@ -23,36 +25,50 @@ public class MachineController {
 
     public void run() {
         machineStart();
-        boolean isRunning = true;
+        State isRunning = State.KEEP_GOING;
+        machineState = State.NOT_FIRST_ON;
 
-        while (isRunning) {
+        while (isRunning != State.OFF) {
             printCurrent();
             int choice = selectMenu();
-            isRunning = optionalMenuChoice(choice);
-
-            if (!isRunning) {
-                break;
-            }
-            isRunning = retry();
+            isRunning = choiceMenuLogic(choice);
         }
-
         logicView.printExchange(ms.getCash());
         inputView.close();
     }
 
+    private State choiceMenuLogic(int choice) {
+        try {
+            State currentState = optionalMenuChoice(choice);
+            if (currentState == State.OFF) {
+                return currentState;
+            }
+
+            if (choice == ms.getMenuSize() - 1) {
+                return State.KEEP_GOING;
+            }
+
+            return retry();
+
+        } catch (IllegalArgumentException | InvalidKeyException e) {
+            exceptionView.printError(e.getMessage());
+            return State.KEEP_GOING;
+        }
+    }
+
     private void machineStart() {
         logicView.printStartMessage();
-        logicView.printVendingMachine(ms.getItems(), ms.getCash());
+        logicView.printVendingMachine(ms.getItems(), ms.getCash(), machineState);
         insertCash();
     }
 
     private void printCurrent() {
         logicView.printCurrentCash(ms.getCash());
-        logicView.printVendingMachine(ms.getItems(), ms.getCash());
+        logicView.printVendingMachine(ms.getItems(), ms.getCash(), machineState);
         logicView.printThickDivider();
     }
 
-    private void insertCash() {
+    private void insertCash() throws IllegalArgumentException {
         boolean inputSuccess = false;
         while (!inputSuccess) {
             try {
@@ -81,39 +97,34 @@ public class MachineController {
         }
     }
 
-    private boolean optionalMenuChoice(int choice) {
+    private State optionalMenuChoice(int choice) throws IllegalArgumentException, InvalidKeyException {
         int menuSize = ms.getMenuSize();
-
         if (choice == menuSize) {
-            return false;
+            return State.OFF;
         }
-
         if (choice == (menuSize - 1)) {
             insertCash();
-            logicView.printCurrentCash(ms.getCash());
-            return true;
+            return State.KEEP_GOING;
         }
-
         purchaseItem(choice);
-        return true;
+        return State.KEEP_GOING;
     }
 
-    private void purchaseItem(int choice) {
-        try {
-            Item purchasedItem = ms.purchaseItem(choice);
-            logicView.printItemOut(purchasedItem, ms.getCash());
-        } catch (InvalidKeyException | RuntimeException e) {
-            exceptionView.printError(e.getMessage());
-        }
+    private void purchaseItem(int choice) throws InvalidKeyException {
+        Item purchasedItem = ms.purchaseItem(choice);
+        logicView.printItemOut(purchasedItem, ms.getCash());
     }
 
-    private boolean retry() {
+    private State retry() {
         logicView.printRetry();
         while (true) {
             try {
                 String input = inputView.readInput();
                 Validator.validateRetry(input);
-                return input.equalsIgnoreCase("y");
+                if (input.equalsIgnoreCase("y")) {
+                    return State.KEEP_GOING;
+                }
+                return State.OFF;
             } catch (IllegalArgumentException e) {
                 exceptionView.printError(e.getMessage());
             }
