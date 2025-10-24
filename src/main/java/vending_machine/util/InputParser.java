@@ -26,8 +26,9 @@ public class InputParser {
     }
 
     public static String parseContinueChoice(String input) {
-        if (RETRY_ACCEPTED_COMMAND.equalsIgnoreCase(input) || RETRY_REFUSED_COMMAND.equalsIgnoreCase(input)) {
-            return input;
+        String upperCaseInput = input.toUpperCase();
+        if (upperCaseInput.equals(RETRY_ACCEPTED_COMMAND) || upperCaseInput.equals(RETRY_REFUSED_COMMAND)) {
+            return upperCaseInput;
         }
         throw new IllegalArgumentException("유효하지 않은 선택입니다. 'Y' 또는 'N'을 입력해주세요.");
     }
