@@ -1,7 +1,6 @@
 package vending_machine;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,7 +17,7 @@ class ApplicationTest extends TestInit {
                 "\"칠성사이다\"가 나왔습니다! (거스름돈: 800원)",
                 "추가 구매를 하시겠습니까? (Y/N)",
                 "현재 투입된 금액: 800원",
-                "금액이 부족합니다. (부족한 금액: 300원)",
+                "[ERROR] 금액이 부족합니다. (부족한 금액: 300원)",
                 "현재 투입된 금액: 1800원",
                 "\"코카콜라\"가 나왔습니다! (거스름돈: 700원)",
                 "거스름돈 700원이 반환되었습니다."
@@ -28,8 +27,8 @@ class ApplicationTest extends TestInit {
     @Test
     @DisplayName("잘못된 입력일 경우 예외가 발생한다.")
     void throwsException() {
-        assertThatThrownBy(() -> run("abc"))
-                .isInstanceOf(IllegalArgumentException.class);
+        run("abc");
+        assertThat(output()).contains("숫자만 입력해주세요.");
     }
 
     @Override
