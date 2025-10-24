@@ -7,6 +7,7 @@ import vending_machine.model.Money;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -38,20 +39,16 @@ public class VendingMachine {
             // 금액 투입 후 메뉴 노출
             System.out.println(showMenu(items));
 
-            // 선택된 아이템 객체를 특정하고 반환
-            Item targetItem = getChoiceItem(askForItemId());
-
-            // 아이템 구매
-            purchaseItem(targetItem);
-
-            // 추가 구매 여부
-            askAgainPurchase();
+            // 메뉴 선택에 따른 행위 분기
+            int id = askForMenuId();
+            Item targetItem = null;
+            routeByMenu(id, targetItem);
 
             if (GameState.ENDED.equals(gameState)) {
                 break;
             }
 
-            money.printBalance(); //while문 밖에서 하면될거같음
+            money.printBalance();
         }
     }
 
@@ -78,8 +75,8 @@ public class VendingMachine {
      * 구입할 상품 번호를 입력받고 반환합니다.
      * @return
      */
-    private int askForItemId() {
-        System.out.print("구입할 상품 번호를 입력하세요 : ");
+    private int askForMenuId() {
+        System.out.print("선택할 메뉴 번호를 입력하세요 : ");
         return scanner.nextInt();
     }
 
@@ -133,4 +130,37 @@ public class VendingMachine {
             gameState = GameState.ENDED;
         }
     }
+
+    /**
+     * 메뉴 선택에 따른 행위를 분기합니다.
+     * @param menuId
+     * @param targetItem
+     */
+    public void routeByMenu(int menuId, Item targetItem) {
+        try {
+            switch (menuId) {
+                case 1, 2, 3, 4, 5:
+                    targetItem = getChoiceItem(menuId);
+                    purchaseItem(targetItem);
+                    askAgainPurchase();
+                    break;
+                case 6:
+                    money.askForAmount();
+                    break;
+                case 7:
+                    money.refund();
+                    gameState = GameState.ENDED;
+                    break;
+                default:
+                    throw new IllegalArgumentException("잘못된 값이 입력되었습니다.");
+            }
+        }catch (InputMismatchException e) {
+            System.out.println(e.getMessage());
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+
+
 }
