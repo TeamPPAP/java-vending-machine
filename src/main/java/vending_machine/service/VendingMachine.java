@@ -19,27 +19,27 @@ public class VendingMachine {
 
     InputReaderFactory reader;
 
-    public VendingMachine(List<Item> items) {
+    public VendingMachine(List<Item> items, InputReaderFactory reader) {
         this.items = items;
+        this.reader = reader;
+        this.money = new Money(reader);
+        this.gameState = GameState.IN_PROGRESS;
     }
     
-    public void run (Scanner scanner) {
-        this.reader = new InputReaderFactory(scanner);
-        this.money = new Money(scanner);
-        this.gameState = GameState.IN_PROGRESS;
-
+    public void run () {
         sayHello();
+
         while(GameState.IN_PROGRESS == gameState) {
             // 최초 메뉴 노출
-            System.out.println(showMenu(items));
+            System.out.println(showMenu(this.items));
             
             // 최초 금액 투입요구
-            money.askForAmount();
+            this.money.askForAmount();
 
-            money.printBalance();
+            this.money.printBalance();
 
             // 금액 투입 후 메뉴 노출
-            System.out.println(showMenu(items));
+            System.out.println(showMenu(this.items));
 
             // 메뉴 선택에 따른 행위 분기
             int id = askForMenuId();
@@ -50,7 +50,7 @@ public class VendingMachine {
                 break;
             }
 
-            money.printBalance();
+            this.money.printBalance();
         }
     }
 
