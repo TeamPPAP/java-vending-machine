@@ -4,7 +4,7 @@ import java.security.InvalidKeyException;
 import java.util.List;
 import vending_machine.domain.Cash;
 import vending_machine.domain.Item;
-import vending_machine.io.InputFile; // Assuming io.InputFile exists
+import vending_machine.io.InputFile;
 
 public class MachineService {
     private final List<Item> items;

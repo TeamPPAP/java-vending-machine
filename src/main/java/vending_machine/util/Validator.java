@@ -4,7 +4,6 @@ import static vending_machine.domain.Announce.ErrorAnnounce.INDEX_BOUND_ERROR;
 import static vending_machine.domain.Announce.ErrorAnnounce.INPUT_EMPTY;
 import static vending_machine.domain.Announce.ErrorAnnounce.ONLY_INPUT_NUMBER;
 import static vending_machine.domain.Announce.ErrorAnnounce.YES_NO;
-import static vending_machine.domain.Announce.MachineAnnounce.DIVIDER_THICK;
 
 public class Validator {
     private Validator() {
