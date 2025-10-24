@@ -20,10 +20,17 @@ public final class InputReaderFactory {
         return new IntegerInputReader(scanner, min, max);
     }
 
+    /** [정수] 양의 정수 읽음 */
+    public InputReader<Integer> positiveInteger() {
+        return new IntegerInputReader(scanner, 0, Integer.MAX_VALUE);
+    }
+
     /* ---------- String ---------- */
 
     /** [문자열] 허용 값 집합(대소문자 구분하지 않음) 중 하나를 읽음 */
     public InputReader<String> stringIn(List<String> allowedValues) {
         return new StringInputReader(scanner, allowedValues);
     }
+
+
 }
