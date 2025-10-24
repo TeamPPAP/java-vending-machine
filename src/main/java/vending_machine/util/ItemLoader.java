@@ -11,9 +11,9 @@ import java.util.stream.Collectors;
 import vending_machine.domain.Item;
 
 public class ItemLoader {
-    public static final String ITEMS_FILE_NAME = "items.json";
+    private static final String ITEMS_FILE_NAME = "items.json";
 
-    public List<Item> loadItems() {
+    public List<Item> load() {
         try {
             List<ItemRawDTO> rawItems = parseItemsFile();
             return mapToItems(rawItems);
@@ -26,17 +26,15 @@ public class ItemLoader {
         Gson gson = new Gson();
         try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream(ITEMS_FILE_NAME)) {
             validateFoundFile(inputStream);
-            try (InputStreamReader reader = new InputStreamReader(inputStream)) {
-                Type listType = new TypeToken<List<ItemRawDTO>>() {
-                }.getType();
-                return gson.fromJson(reader, listType);
-            }
+            return getItemRawDTOS(inputStream, gson);
         }
     }
 
-    private record ItemRawDTO(String name, double price, double stock) {
-        public Item toItem() {
-            return Item.from(name, (int) price, (int) stock);
+    private List<ItemRawDTO> getItemRawDTOS(InputStream inputStream, Gson gson) throws IOException {
+        try (InputStreamReader reader = new InputStreamReader(inputStream)) {
+            Type listType = new TypeToken<List<ItemRawDTO>>() {
+            }.getType();
+            return gson.fromJson(reader, listType);
         }
     }
 
@@ -46,9 +44,15 @@ public class ItemLoader {
                 .collect(Collectors.toList());
     }
 
-    private void validateFoundFile(final InputStream inputStream) {
+    private void validateFoundFile(InputStream inputStream) {
         if (inputStream == null) {
             throw new RuntimeException("'" + ITEMS_FILE_NAME + "' 파일을 찾을 수 없습니다.");
+        }
+    }
+
+    private record ItemRawDTO(String name, double price, double stock) {
+        public Item toItem() {
+            return Item.from(name, (int) price, (int) stock);
         }
     }
 }
