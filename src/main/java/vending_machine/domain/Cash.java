@@ -1,7 +1,7 @@
 package vending_machine.domain;
 
-import static vending_machine.domain.Announce.ErrorAnnounce.GO_AWAY_POOR;
 import static vending_machine.domain.Announce.ErrorAnnounce.INPUT_EMPTY;
+import static vending_machine.domain.Announce.ErrorAnnounce.INSERT_MORE_CASH;
 import static vending_machine.domain.Announce.ErrorAnnounce.KOREA_MONEY;
 import static vending_machine.domain.Announce.ErrorAnnounce.MINUS_CASH;
 import static vending_machine.domain.Announce.ErrorAnnounce.NOT_ENOUGH_CASH;
@@ -51,14 +51,14 @@ public class Cash {
         validInput(input);
         int money = validInt(input);
         validKoreaMoney(money);
-        validCash(money);
+        validInsertCash(money);
         notMinusMoney(money);
         return money;
     }
 
-    private void validCash(int money) {
-        if (money <= 0) {
-            throw new IllegalArgumentException(GO_AWAY_POOR.getMessage());
+    private void validInsertCash(int money) {
+        if (money == 0) {
+            throw new IllegalArgumentException(INSERT_MORE_CASH.getMessage());
         }
     }
     private void validInput(String input) {
