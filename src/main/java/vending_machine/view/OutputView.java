@@ -1,6 +1,10 @@
 package vending_machine.view;
 
+import static vending_machine.controller.VendingMachineController.ADD_MONEY_CHOICE;
+import static vending_machine.controller.VendingMachineController.RETURN_CHANGE_CHOICE;
+
 import java.util.List;
+import java.util.stream.IntStream;
 import vending_machine.controller.dto.ItemDTO;
 import vending_machine.domain.Money;
 
@@ -16,21 +20,22 @@ public class OutputView {
 
     public void printItemList(List<ItemDTO> items) {
         System.out.println("===============================");
-        //IntStream.range()
-        for (int i = 0; i < items.size(); i++) {
-            ItemDTO itemDTO = items.get(i);
-            System.out.printf("[%d] %s (%d원) - %d개\n",
-                    i + 1,
-                    itemDTO.name(),
-                    itemDTO.price(),
-                    itemDTO.stock());
-        }
+        IntStream.range(0, items.size())
+                .forEach(i -> {
+                    ItemDTO itemDTO = items.get(i);
+                    System.out.printf("[%d] %s (%d원) - %d개\n",
+                            i + 1,
+                            itemDTO.name(),
+                            itemDTO.price(),
+                            itemDTO.stock());
+                });
+
         System.out.println("-------------------------------");
     }
 
     public void printPurchaseMenu() {
-        System.out.println("[6] 금액 추가 투입");
-        System.out.println("[7] 금액 반환");
+        System.out.println("[" + ADD_MONEY_CHOICE + "]" + "금액 추가 투입");
+        System.out.println("[" + RETURN_CHANGE_CHOICE + "]" + "금액 반환");
         System.out.println("===============================");
     }
 

@@ -3,10 +3,11 @@ package vending_machine.domain;
 public record Money(
         int amount
 ) {
+    private static final int MIN_AMOUNT = 0;
 
     public Money {
-        if (amount < 0) {
-            throw new IllegalArgumentException("금액은 0 미만일 수 없습니다.");
+        if (amount < MIN_AMOUNT) {
+            throw new IllegalArgumentException("금액은 " + MIN_AMOUNT + "미만일 수 없습니다.");
         }
     }
 

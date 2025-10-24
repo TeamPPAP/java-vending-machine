@@ -1,9 +1,8 @@
 package vending_machine.view;
 
+import java.util.Scanner;
 import vending_machine.domain.Money;
 import vending_machine.util.InputParser;
-
-import java.util.Scanner;
 
 public class InputView {
     private final Scanner scanner = new Scanner(System.in);
@@ -17,7 +16,6 @@ public class InputView {
     public int getItemToPurchase() {
         System.out.print("구입할 상품 번호를 입력하세요 : ");
         String input = scanner.nextLine();
-
         return InputParser.parseInt(input);
     }
 

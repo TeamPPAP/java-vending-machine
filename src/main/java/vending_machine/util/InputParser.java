@@ -35,15 +35,15 @@ public class InputParser {
         throw new IllegalArgumentException("유효하지 않은 선택입니다. 'Y' 또는 'N'을 입력해주세요.");
     }
 
-    private static void validateUpperNumber(int number) {
-        if (number < 1) {
-            throw new IllegalArgumentException("번호는 1 이상의 정수여야 합니다.");
-        }
-    }
-
     private static void validateAmountUnit(int amount) {
         if (amount % MONEY_UNIT != 0) {
             throw new IllegalArgumentException("투입 금액은 " + MONEY_UNIT + "원 단위여야 합니다.");
+        }
+    }
+
+    private static void validateUpperNumber(int number) {
+        if (number < 1) {
+            throw new IllegalArgumentException("번호는 1 이상의 정수여야 합니다.");
         }
     }
 }
