@@ -10,9 +10,6 @@ import static vending_machine.domain.Announce.ErrorAnnounce.ONLY_INPUT_NUMBER;
 public class Cash {
     private int cash;
 
-    private Cash() {
-    }
-
     private Cash(int cash) {
         this.cash = cash;
     }
