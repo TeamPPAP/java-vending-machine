@@ -1,6 +1,7 @@
 package vending_machine.controller;
 
 import java.util.List;
+import java.util.function.Supplier;
 import vending_machine.controller.dto.ItemDTO;
 import vending_machine.domain.Item;
 import vending_machine.domain.Money;
@@ -11,8 +12,8 @@ import vending_machine.view.OutputView;
 
 
 public class VendingMachineController {
-    private static final int ADD_MONEY_CHOICE = 6;
-    private static final int RETURN_CHANGE_CHOICE = 7;
+    public static final int ADD_MONEY_CHOICE = 6;
+    public static final int RETURN_CHANGE_CHOICE = 7;
 
     private final VendingMachine vendingMachine;
     private final InputView inputView;
@@ -32,15 +33,8 @@ public class VendingMachineController {
     }
 
     private void setupInitialMoney() {
-        while (true) {
-            try {
-                Money initialMoney = inputView.getInitialMoney();
-                vendingMachine.insertMoney(initialMoney);
-                return;
-            } catch (IllegalArgumentException e) {
-                outputView.printErrorMessage(e.getMessage());
-            }
-        }
+        Money initialMoney = getValidInput(inputView::getInitialMoney);
+        vendingMachine.insertMoney(initialMoney);
     }
 
     private void runPurchaseLoop() {
@@ -50,7 +44,7 @@ public class VendingMachineController {
                 displayItems();
                 outputView.printPurchaseMenu();
 
-                int choice = inputView.getItemToPurchase();
+                int choice = getValidInput(inputView::getItemToPurchase);
                 if (handleChoice(choice)) {
                     break;
                 }
@@ -72,6 +66,11 @@ public class VendingMachineController {
         return handlePurchase(choice);
     }
 
+    private void addMoney() {
+        Money moneyToAdd = getValidInput(inputView::getInitialMoney);
+        vendingMachine.insertMoney(moneyToAdd);
+    }
+
     private boolean handlePurchase(int choice) {
         processPurchase(choice);
         if (!askForContinue()) {
@@ -87,20 +86,9 @@ public class VendingMachineController {
         outputView.printPurchaseSuccess(purchasedItem.getName(), vendingMachine.getCurrentMoney());
     }
 
-    private void addMoney() {
-        Money moneyToAdd = inputView.getInitialMoney();
-        vendingMachine.insertMoney(moneyToAdd);
-    }
-
     private boolean askForContinue() {
-        while (true) {
-            try {
-                String choice = inputView.getContinueChoice();
-                return choice.equals(InputParser.RETRY_ACCEPTED_COMMAND);
-            } catch (IllegalArgumentException e) {
-                outputView.printErrorMessage(e.getMessage());
-            }
-        }
+        String choice = getValidInput(inputView::getContinueChoice);
+        return choice.equals(InputParser.RETRY_ACCEPTED_COMMAND);
     }
 
     private void returnChangeAndEndLoop() {
@@ -113,7 +101,16 @@ public class VendingMachineController {
         List<ItemDTO> itemDTOs = items.stream()
                 .map(item -> new ItemDTO(item.getName(), item.getPrice().amount(), item.getStock().getQuantity()))
                 .toList();
-
         outputView.printItemList(itemDTOs);
+    }
+
+    private <T> T getValidInput(Supplier<T> inputSupplier) {
+        while (true) {
+            try {
+                return inputSupplier.get();
+            } catch (IllegalArgumentException e) {
+                outputView.printErrorMessage(e.getMessage());
+            }
+        }
     }
 }
