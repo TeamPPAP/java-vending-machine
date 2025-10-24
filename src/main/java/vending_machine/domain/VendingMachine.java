@@ -45,10 +45,18 @@ public class VendingMachine {
     }
 
     private void validatePurchase(Item item) {
+        validateSufficientMoney(item);
+        validateStockAvailable(item);
+    }
+
+    private void validateSufficientMoney(Item item) {
         if (!item.isPurchasable(this.currentMoney)) {
             int missingAmount = item.getPrice().amount() - this.currentMoney.amount();
             throw new IllegalArgumentException(String.format("금액이 부족합니다. (부족한 금액: %d원)", missingAmount));
         }
+    }
+
+    private void validateStockAvailable(Item item) {
         if (!item.hasStock()) {
             throw new IllegalArgumentException("재고가 부족합니다.");
         }
