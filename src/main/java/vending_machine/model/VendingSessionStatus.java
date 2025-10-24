@@ -1,5 +1,5 @@
 package vending_machine.model;
 
-public enum GameState {
+public enum VendingSessionStatus {
     IN_PROGRESS, ENDED;
 }
