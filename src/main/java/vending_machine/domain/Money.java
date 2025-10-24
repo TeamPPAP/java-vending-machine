@@ -5,7 +5,7 @@ public record Money(
 ) {
 
     public Money {
-        if (isZero() || amount < 0) {
+        if (amount < 0) {
             throw new IllegalArgumentException("금액은 0 미만일 수 없습니다.");
         }
     }
@@ -20,9 +20,5 @@ public record Money(
 
     public boolean isGreaterThanOrEqualTo(Money other) {
         return other.amount <= this.amount;
-    }
-
-    private boolean isZero() {
-        return this.amount == 0;
     }
 }
