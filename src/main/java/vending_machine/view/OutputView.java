@@ -34,8 +34,8 @@ public class OutputView {
     }
 
     public void printPurchaseMenu() {
-        System.out.println("[" + ADD_MONEY_CHOICE + "]" + "금액 추가 투입");
-        System.out.println("[" + RETURN_CHANGE_CHOICE + "]" + "금액 반환");
+        System.out.println("[" + ADD_MONEY_CHOICE + "]" + " 금액 추가 투입");
+        System.out.println("[" + RETURN_CHANGE_CHOICE + "]" + " 금액 반환");
         System.out.println("===============================");
     }
 
@@ -48,6 +48,6 @@ public class OutputView {
     }
 
     public void printErrorMessage(String message) {
-        System.out.println("[ERROR] " + message);
+        System.out.println("\n[ERROR] " + message + "\n");
     }
 }

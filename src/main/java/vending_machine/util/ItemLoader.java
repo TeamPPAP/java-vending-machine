@@ -7,7 +7,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.util.List;
-import java.util.stream.Collectors;
 import vending_machine.domain.Item;
 
 public class ItemLoader {
@@ -41,7 +40,7 @@ public class ItemLoader {
     private List<Item> mapToItems(List<ItemRawDTO> rawItems) {
         return rawItems.stream()
                 .map(ItemRawDTO::toItem)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     private void validateFoundFile(InputStream inputStream) {
@@ -50,9 +49,9 @@ public class ItemLoader {
         }
     }
 
-    private record ItemRawDTO(String name, double price, double stock) {
+    private record ItemRawDTO(String name, int price, int stock) {
         public Item toItem() {
-            return Item.from(name, (int) price, (int) stock);
+            return Item.from(name, price, stock);
         }
     }
 }

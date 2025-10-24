@@ -7,7 +7,7 @@ public record Money(
 
     public Money {
         if (amount < MIN_AMOUNT) {
-            throw new IllegalArgumentException("금액은 " + MIN_AMOUNT + "미만일 수 없습니다.");
+            throw new IllegalArgumentException("금액은 " + MIN_AMOUNT + "원 미만일 수 없습니다.");
         }
     }
 
