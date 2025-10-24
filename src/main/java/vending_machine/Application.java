@@ -2,6 +2,7 @@ package vending_machine;
 
 import vending_machine.service.VendingMachine;
 import vending_machine.util.ItemLoader;
+import vending_machine.util.input.InputReaderFactory;
 
 import java.util.Scanner;
 
@@ -12,15 +13,11 @@ import java.util.Scanner;
 public class Application {
     public static void main(String[] args) {
         ItemLoader itemLoader = new ItemLoader();
-        VendingMachine vendingMachine = new VendingMachine(itemLoader.getItems());
 
         try(Scanner scanner = new Scanner(System.in)){
-            vendingMachine.run(scanner);
+            VendingMachine vendingMachine = new VendingMachine(
+                    itemLoader.getItems(), new InputReaderFactory(scanner));
+            vendingMachine.run();
         }
-
-
-
     }
-
-
 }
