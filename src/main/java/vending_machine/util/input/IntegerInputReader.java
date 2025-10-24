@@ -19,17 +19,25 @@ public class IntegerInputReader implements InputReader<Integer>{
 
     @Override
     public Integer read() {
-        int input;
+        String input;
         while (true){
             try {
-                input = scanner.nextInt();
+                input = scanner.nextLine();
 
-                if(minValue > input || input > maxValue){
+                if(!input.matches("-?\\d+(\\.\\d+)?")){
+                    System.out.println("정수만 입력할 수 있습니다." );
+                    continue;
+                }
+
+                int inputNumber = Integer.parseInt(input);
+
+
+                if(minValue > inputNumber || inputNumber > maxValue){
                     System.out.println("유효 범위를 벗어났습니다. " + minValue + " ~ " + maxValue + "사이의 정수만 입력할 수 있습니다." );
                     continue;
                 }
 
-                return input;
+                return inputNumber;
             }  catch (InputMismatchException e) {
                 System.out.println(e.getMessage() + "❌ 올바른 숫자를 입력하세요.");
                 scanner.next();

@@ -23,7 +23,6 @@ public class StringInputReader implements InputReader<String>{
     public String read() {
         while (true){
             String input = scanner.nextLine().trim().toUpperCase();
-            scanner.next();
 
             if (input.isEmpty()) {
                 System.out.println("❌ 입력이 비어있습니다.");
