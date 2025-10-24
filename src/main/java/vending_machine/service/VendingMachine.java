@@ -1,7 +1,7 @@
 package vending_machine.service;
 
 import vending_machine.model.CreditState;
-import vending_machine.model.GameState;
+import vending_machine.model.VendingSessionStatus;
 import vending_machine.model.Item;
 import vending_machine.model.Money;
 import vending_machine.util.input.InputReaderFactory;
@@ -13,7 +13,7 @@ import java.util.List;
 
 public class VendingMachine {
     Money money;
-    GameState gameState;
+    VendingSessionStatus gameState;
     private List<Item> items = new ArrayList<>();
 
     InputReaderFactory reader;
@@ -22,18 +22,18 @@ public class VendingMachine {
         this.items = items;
         this.reader = reader;
         this.money = new Money(reader);
-        this.gameState = GameState.IN_PROGRESS;
+        this.gameState = VendingSessionStatus.IN_PROGRESS;
     }
     
     public void run () {
         sayHello();
 
-        while(GameState.IN_PROGRESS == gameState) {
+        while(VendingSessionStatus.IN_PROGRESS == gameState) {
             // 최초 메뉴 노출
             System.out.println(showMenu(this.items));
             
             // 최초 금액 투입요구
-            this.money.askForAmount();
+            this.money.readDepositAndCredit();
 
             this.money.printBalance();
 
@@ -45,7 +45,7 @@ public class VendingMachine {
             Item targetItem = null;
             routeByMenu(id, targetItem);
 
-            if (GameState.ENDED == gameState) {
+            if (VendingSessionStatus.ENDED == gameState) {
                 break;
             }
 
@@ -122,12 +122,12 @@ public class VendingMachine {
 
         if(CreditState.NO_CREDIT == money.getCreditState()){
             System.out.println("종료된다.");
-            gameState = GameState.ENDED;
+            gameState = VendingSessionStatus.ENDED;
         }
 
         if("N".equals(result)){
             money.refund();
-            gameState = GameState.ENDED;
+            gameState = VendingSessionStatus.ENDED;
         }
     }
 
@@ -145,11 +145,11 @@ public class VendingMachine {
                     askAgainPurchase();
                     break;
                 case 6:
-                    money.askForAmount();
+                    money.readDepositAndCredit();
                     break;
                 case 7:
                     money.refund();
-                    gameState = GameState.ENDED;
+                    gameState = VendingSessionStatus.ENDED;
                     break;
                 default:
                     throw new IllegalArgumentException("잘못된 값이 입력되었습니다.");

@@ -19,8 +19,7 @@ public class Money {
         return balance;
     }
 
-    //TODO : 금액 투입 + 필드 반영을 위한 적절한 명칭 변경 예정
-    public void askForAmount() {
+    public void readDepositAndCredit() {
         System.out.print("투입할 금액을 입력해주세요 : ");
         credit(BigDecimal.valueOf(reader.positiveInteger().read()));
     }
