@@ -5,10 +5,12 @@ import vending_machine.domain.Money;
 public class InputParser {
     public static final String RETRY_ACCEPTED_COMMAND = "Y";
     public static final String RETRY_REFUSED_COMMAND = "N";
+    private static final int MONEY_UNIT = 100;
 
     public static Money parseMoney(String input) {
         try {
             int amount = Integer.parseInt(input);
+            validateAmountUnit(amount);
             return new Money(amount);
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException("유효하지 않은 금액입니다. 숫자만 입력해주세요.");
@@ -36,6 +38,12 @@ public class InputParser {
     private static void validateUpperNumber(int number) {
         if (number < 1) {
             throw new IllegalArgumentException("번호는 1 이상의 정수여야 합니다.");
+        }
+    }
+
+    private static void validateAmountUnit(int amount) {
+        if (amount % MONEY_UNIT != 0) {
+            throw new IllegalArgumentException("투입 금액은 " + MONEY_UNIT + "원 단위여야 합니다.");
         }
     }
 }
