@@ -1,18 +1,18 @@
 package vending_machine.model;
 
+import vending_machine.util.input.InputReaderFactory;
+
 import java.math.BigDecimal;
-import java.util.Scanner;
-//TODO : Scanner를 분리가 필요합니다.
 
 public class Money {
     private CreditState creditState;
     private BigDecimal balance;
-    Scanner scanner;
+    private InputReaderFactory reader;
 
-    public Money(Scanner scanner) {
+    public Money(InputReaderFactory inputReaderFactory) {
         balance = BigDecimal.ZERO;
         creditState = CreditState.NO_CREDIT;
-        this.scanner = scanner;
+        reader = inputReaderFactory;
     }
 
     public BigDecimal getBalance() {
@@ -22,7 +22,7 @@ public class Money {
     //TODO : 금액 투입 + 필드 반영을 위한 적절한 명칭 변경 예정
     public void askForAmount() {
         System.out.print("투입할 금액을 입력해주세요 : ");
-        credit(BigDecimal.valueOf(scanner.nextInt()));
+        credit(BigDecimal.valueOf(reader.positiveInteger().read()));
     }
 
     public void credit(BigDecimal amount) {
