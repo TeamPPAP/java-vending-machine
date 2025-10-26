@@ -35,9 +35,7 @@ public class HasBalanceState implements VendingMachineState {
         context.subtractBalance(selectedItem.getPrice());
         context.getInventory().purchase(product);
 
-        if (context.getBalance() == 0) {
-            context.setState(NoBalanceState.getInstance());
-        }
+        transitionToNoBalanceIfNeeded(context);
     }
 
     @Override
@@ -48,6 +46,10 @@ public class HasBalanceState implements VendingMachineState {
     @Override
     public void userWithdrawnBalance(VendingMachineContext context, int amount) {
         context.subtractBalance(amount);
+        transitionToNoBalanceIfNeeded(context);
+    }
+
+    private void transitionToNoBalanceIfNeeded(VendingMachineContext context) {
         if (context.getBalance() == 0) {
             context.setState(NoBalanceState.getInstance());
         }
