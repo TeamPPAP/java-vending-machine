@@ -40,13 +40,13 @@ public class VendingMachineController {
         outputView.printMenu(info.inventory(), info.balance());
 
         if (vendingMachineService.isBalanceZero()) {
-            int money = inputView.readMoney();
+            int money = retryOnInvalidInput(inputView::readMoney);
             vendingMachineService.depositBalance(money);
         }
     }
 
     private void handleUserActions() {
-        int choice = inputView.readMenuChoice();
+        int choice = retryOnInvalidInput(inputView::readMenuChoice);
         int size = vendingMachineService.getInventorySize();
 
         MenuAction menuAction = MenuAction.from(choice, size);
@@ -59,7 +59,7 @@ public class VendingMachineController {
     }
 
     private void handleAddMoney() {
-        int money = inputView.readMoney();
+        int money = retryOnInvalidInput(inputView::readMoney);
         vendingMachineService.depositBalance(money);
     }
 
@@ -89,9 +89,24 @@ public class VendingMachineController {
             return;
         }
 
-        boolean continuePurchase = inputView.readContinuePurchase();
+        boolean continuePurchase = retryOnInvalidInput(inputView::readContinuePurchase);
         if (!continuePurchase) {
             handleReturnMoney();
         }
+    }
+
+    private <T> T retryOnInvalidInput(InputSupplier<T> inputSupplier) {
+        while (true) {
+            try {
+                return inputSupplier.get();
+            } catch (IllegalArgumentException e) {
+                outputView.printError(e.getMessage());
+            }
+        }
+    }
+
+    @FunctionalInterface
+    private interface InputSupplier<T> {
+        T get() throws IllegalArgumentException;
     }
 }
