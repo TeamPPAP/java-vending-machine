@@ -26,7 +26,7 @@ class InputParserTest {
     @Test
     @DisplayName("최소 상품 번호 미만의 값 입력 시 예외가 발생한다.")
     void shouldThrowsException_whenLessThanOne() {
-        assertThatThrownBy(() -> InputParser.parseInt("0"))
+        assertThatThrownBy(() -> InputParser.parseMenuChoice("0"))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("번호는 1 이상의 정수여야 합니다.");
     }

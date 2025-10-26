@@ -10,7 +10,7 @@ class ApplicationTest extends TestInit {
     @Test
     @DisplayName("정상적으로 실행이 된다.")
     void runTest() {
-        run("2000", "2", "Y", "1", "6", "1000", "1", "N");
+        run("2000", "2", "Y", "1", "A", "1000", "1", "N");
 
         assertThat(output()).contains(
                 "현재 투입된 금액: 2000원",

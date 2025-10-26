@@ -13,10 +13,10 @@ public class InputView {
         return InputParser.parseMoney(input);
     }
 
-    public int getItemToPurchase() {
+    public String getMenuChoice() {
         System.out.print("구입할 상품 번호를 입력하세요 : ");
         String input = scanner.nextLine();
-        return InputParser.parseInt(input);
+        return InputParser.parseMenuChoice(input);
     }
 
     public String getContinueChoice() {

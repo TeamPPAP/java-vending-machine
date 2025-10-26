@@ -1,5 +1,8 @@
 package vending_machine.controller;
 
+import static vending_machine.util.InputParser.ADD_MONEY_COMMAND;
+import static vending_machine.util.InputParser.RETURN_CHANGE_COMMAND;
+
 import java.util.List;
 import java.util.function.Supplier;
 import vending_machine.controller.dto.ItemDTO;
@@ -10,11 +13,7 @@ import vending_machine.util.InputParser;
 import vending_machine.view.InputView;
 import vending_machine.view.OutputView;
 
-
 public class VendingMachineController {
-    public static final int ADD_MONEY_CHOICE = 6;
-    public static final int RETURN_CHANGE_CHOICE = 7;
-
     private final VendingMachine vendingMachine;
     private final InputView inputView;
     private final OutputView outputView;
@@ -44,7 +43,7 @@ public class VendingMachineController {
                 displayItems();
                 outputView.printPurchaseMenu();
 
-                int choice = getValidInput(inputView::getItemToPurchase);
+                String choice = getValidInput(inputView::getMenuChoice);
                 if (handleChoice(choice)) {
                     break;
                 }
@@ -54,12 +53,12 @@ public class VendingMachineController {
         }
     }
 
-    private boolean handleChoice(int choice) {
-        if (choice == ADD_MONEY_CHOICE) {
+    private boolean handleChoice(String choice) {
+        if (choice.equals(ADD_MONEY_COMMAND)) {
             addMoney();
             return false;
         }
-        if (choice == RETURN_CHANGE_CHOICE) {
+        if (choice.equals(RETURN_CHANGE_COMMAND)) {
             returnChangeAndEndLoop();
             return true;
         }
@@ -71,8 +70,9 @@ public class VendingMachineController {
         vendingMachine.insertMoney(moneyToAdd);
     }
 
-    private boolean handlePurchase(int choice) {
-        processPurchase(choice);
+    private boolean handlePurchase(String choice) {
+        int itemIndex = Integer.parseInt(choice);
+        processPurchase(itemIndex);
         if (!askForContinue()) {
             returnChangeAndEndLoop();
             return true;

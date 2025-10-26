@@ -1,8 +1,5 @@
 package vending_machine.view;
 
-import static vending_machine.controller.VendingMachineController.ADD_MONEY_CHOICE;
-import static vending_machine.controller.VendingMachineController.RETURN_CHANGE_CHOICE;
-
 import java.util.List;
 import java.util.stream.IntStream;
 import vending_machine.controller.dto.ItemDTO;
@@ -34,8 +31,8 @@ public class OutputView {
     }
 
     public void printPurchaseMenu() {
-        System.out.println("[" + ADD_MONEY_CHOICE + "]" + " 금액 추가 투입");
-        System.out.println("[" + RETURN_CHANGE_CHOICE + "]" + " 금액 반환");
+        System.out.println("[A] 금액 추가 투입");
+        System.out.println("[R] 금액 반환");
         System.out.println("===============================");
     }
 
